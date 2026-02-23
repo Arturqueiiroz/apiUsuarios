@@ -9,6 +9,16 @@ namespace apiUsuarios
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+           
+            
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll",
+                    builder => builder.AllowAnyOrigin()
+                                      .AllowAnyMethod()
+                                      .AllowAnyHeader());
+            });
+
 
             // Add services to the container.
 
@@ -34,6 +44,8 @@ namespace apiUsuarios
             }
 
             app.UseHttpsRedirection();
+            
+            app.UseCors("AllowAll");
 
             app.UseAuthorization();
 
