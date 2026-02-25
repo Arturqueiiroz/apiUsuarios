@@ -46,6 +46,20 @@ namespace apiUsuarios.Controllers
             {
                 return BadRequest("Dados inválidos");
             }
+            // Verifica se email já existe
+            bool emailExiste = await _appDbContext.Usuarios
+                .AnyAsync(u => u.Email == dadosUsuario.Email);
+
+            if (emailExiste)
+            {
+                return BadRequest("Este email já está cadastrado");
+            }
+
+            // Verifica tamanho mínimo da senha
+            if (dadosUsuario.Senha.Length < 3)
+            {
+                return BadRequest("A senha deve ter no mínimo 3 caracteres");
+            }
             // criando um novo objeto Usuario com os dados fornecidos no corpo da solicitação.
             string senhaCriptografada = CryptoService.EncryptPassword(dadosUsuario.Senha);
             Usuario usuarioSalvar = new Usuario
